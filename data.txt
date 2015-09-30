@@ -1,0 +1,351 @@
+
+# comment line 1
+# comment line 2
+
+# empty line is ok 
+# lines with white spaces (tab, white space) are considered empty lines
+
+# all entries ending with semi-colon ";" as the last charater of the line
+# comments are not allowed to start from middle of line; comment  must start from the beginning of the line;
+# parameter keywords are in square brackets, they are case-INsensitive;
+# file has several sections, marked by section titles inside <>, such as <Project> </Project>
+# section titles are case-insensitive
+
+<Project>
+[user_id] Usr01;    
+
+[company_id] ABC;
+
+[project_name] Ex01;
+
+[design_name] 248; 
+ # [user_id], [company_id], [project_name] and [design_name] contain character values that are: 
+ # (1) case-insensitive
+ # (2) alphanumeric values are allowed
+ # (3) hypen "-" and underscore "_" and dot "." are allowed
+ # (4) no white spaces or other special characters are allowed
+ # strip off leading and trailing white spaces of all strings
+ 
+[nominal_pitch] 1;
+# default unit(mm)
+
+[x_pitch] 1;
+# default unit(mm)
+
+[y_pitch] 1;
+# default unit(mm)
+
+[x_offset] 0;
+# default unit(mm)
+
+[port_impedance] 50;
+# default unit(ohm);
+
+[term_impedance] 50; 
+# default unit (ohm);
+
+[se_spec] 1, 13, -25, -35;
+# FOUR double type numbers for IL(dB), RL(dB), NEXT(dB), FEXT(dB)
+# IL and RL must be positive; NEXT and FEXT must be negative; if not meeting this requirement, report error
+
+[se_spec_freq] 5;
+# single-ended spec frequency
+# default unit(GHz)
+# must be positive, less than 100GHz
+
+[diff_spec] 1, 13, -25, -35;
+# FOUR double type numbers for IL(dB), RL(dB), NEXT(dB), FEXT(dB)
+
+[diff_spec_freq] 5;
+# differential spec frequency
+# default unit(GHz)
+# must be positive, less than 100GHz
+
+</Project>
+
+<Socket>
+[total_layers] 1;
+[total_height] 5.21;
+# default unit (mm);
+
+[layer] 1, dielectric, _peek_ceramic, 5.21;
+# first integer is layer number, followed by two case-sensitive strings of material_type and material_name, 
+#            followed by a double precision thickness in mm;
+# the program should check that layer numbers start from 1 and consecutively increase to total_layers;
+# each layer must use the same unit (mm) as the [total_height]
+
+</Socket>
+
+<PinCav>
+# syntax:
+# [pin_X] name, type, shape, part_number, cross_section;
+# name, type, shape, part_number are strings (case-insensitive);
+# cross section is integer;
+# where [pin_X] could be [pin1], [pin2], [pin3]
+# there could be up to three different types of pins in a single design
+
+[pin1] 248-01, BGA, stack, 623-248-01, 8;
+#[pin2]
+#[pin3]
+
+# syntax:
+# [cav_X] name, type, shape, part_number;
+# where [cav_X] could be [cav1], [cav2], [cav3]
+# there could be up to three different types of cavities in a single design, corresponding to three types of pins
+
+[cav1] c248-01, BGA, stack, 852-010359-00; 
+# there is no cross_section in [cav1],[cav2],[cav3] because they are the same as the corresponding [pin1],[pin2],[pin3]
+#[cav2] name, type, shape, part_number;
+#[cav3] name, type, shape, part_number;
+
+</PinCav>
+
+<PCB>
+[part_number] siggnd_rect_port;
+# "siggnd_rect_port" is the only PCB part number supported now;
+
+[description] signal and ground layers with offset rectangle port;
+
+[npoly] 8;
+# PCB pads are drawn as polygons rather than circles;
+# npoly is the total number of polygon edge sections
+
+[orientation] edge;
+# either "edge" or "node" of string type (case-insensitive);
+# if "edge", then the starting edge of the polygon is parallel to x axis;
+# if "node", then the starting node of the polygon is located on the "local" x=0 location
+# the "local" coordinate origin is at the center of the pad (which is the same as center of the pin);
+
+[dpad] 0.6;
+# pad diameter of double type, default unit mm; 
+
+[tpad] 0.02;
+# pad thickness of double type, default unit mm;
+
+[matpad] copper;
+# pad material (case-insensitive)
+
+[twidth] 0.18;
+# trace width of double type, default unit mm;
+
+[nvoffx] 0.4;
+[nvoffy] 0.4;
+# x and y offset 
+# these two offset numbers are ratios of pitch 
+# for example, [nvoffx]=0.4 indicates 0.4*pitchx
+#              [nvoffy]=0.5 indicates 0.5*pitchy 
+# these two offset numbers gave the location of the port relative to the pin center
+
+[td1] 0.1;
+# thickness of dielectric layer of double type, default unit mm;
+
+[diel_mat_name] FR4_expoxy;
+# name of dielectric material of string type (case-insensitive);
+# this material must be present in material library
+
+[tcu2] 0.02;
+# thickness of the ground copper layer, default unit mm
+
+</PCB>
+
+<Package>
+[type] BGA;
+# {"LGA" , "BGA" , "PGA"} of string type (case-insensitive);
+
+[part_number] bga_siggnd_rect_port;
+# {"bga_siggnd_rect_port", "lga_siggnd_rect_port"} of string type (case-insensitive);
+
+[description] BGA package model of signal and ground layers with offset rectangle ports;
+# the [description] is a string that is carried verbatim 
+
+# the following parameters have the same meaning as those in the <PCB> section:
+[npoly] 8;
+[orientation] edge;
+[dpad] 0.5;
+[tpad] 0.02;
+[matpad] copper;
+[twidth] 0.15;
+[nvoffx] 0.4; 
+[nvoffy] 0.4; 
+[td1] 0.1;
+[diel_mat_name] FR4_epoxy;
+[tcu2] 0.02;
+# in above parameters, all string values are case-insensitive
+
+# the following parameters are  only valid when "type" is BGA
+[bga_diameter] 0.35;
+# ball diameter of double type, default mm; 
+
+[bga_height] 0.17;
+# ball height of double type, default mm;
+# height must be less than diameter, the BGA ball is a partial sphere where it is chopped off the top when connected to BGA pads
+
+[ball_type] 0;
+# this is an integer of following values:
+# (in the mean time, we only need to display as perfect sphere with the top part cut off)
+# 0: sphere; the BGA ball is drawn as a partial sphere with top part cut off
+# 1: cylinder; the BGA ball is drawn as a cylinder
+# 2: not allowed
+# 3~8: the BGA ball is drawn as a poly-sphere; this is the number of edges in the vertical cross-section 
+#  (the horizontal sections are regulated by [ball_poly])
+
+[ball_poly] 8;
+# number of polygon edges in the horizontal cross-section
+
+[bga_ori] edge;
+# the two allowable values are {"edge", "node"}; case-insensitive
+# when "edge" is selected, the first edge of the polygon is parallel to the x-axis (the center of the edge is at x=0)
+# when "node" is selected, the first node of the polygon is located at x=0
+
+</Package>
+
+
+<Array>
+[nx] 4;
+# array size in x direction, integer type; 
+[ny] 6;
+# array size in y direction, integer type;
+
+[xedge] 2,2;
+# min, max values of double type;  the first entry is min, second entry is max;
+# ratios of x pitch; 
+# this is the min and max edge of the solution domain in x-axis, extended from the center of the pins having min and max x values, respectively
+# xedge.min=2 indicates that the left edge of the simulation domain is located at 2*pitchx away from the pins with minimum x value;
+# xedge.max=2 indicates that the right edge of the simulation domain is located at 2*pitchx away from the pins with maximum x value;
+
+[yedge] 2,2
+# simlar to [xedge] parameter
+
+[pin_array] 
+# the pin_array keyword must be on a line of its own, then followed by [nx] number of lines
+# where each line contains [ny] number of integers of {1,2,3}
+# and each integer represents pin1, pin2, pin3 at that location
+
+1, 1, 1, 1, 1, 1;
+1, 1, 1, 1, 1, 1;
+1, 1, 1, 1, 1, 1;
+1, 1, 1, 1, 1, 1;
+
+# this represents a 4-by-6 array (x=4,y=6) consisted of pin1
+# note the orientation of the global xy coordinates in the xls spreadsheet "ARRAY" and also in this table,
+#      the x-axis is from top to bottom, the y-axis is from left to right
+#      in this array, starting from top left corner downward, are x=1,2,3,4
+#                     starting from top left corner to the right are y=1,2,3,4,5,6
+
+# there is no separate entry for [cav_array] because,
+# for pin1, use cav1; for pin2, use cav2; for pin3, use cav3; in the cavity array; 
+
+[PCB_terminals]
+0, -1,  0, 7, -1, -1;
+-1, 1,  5, 0,  0,  0;
+-1, 3,  0, 9, 11,  0;
+0, -1,  0, -1, -1, -1;
+
+# the [PCB_terminals] keyword must be on a line of its own, then followed by [nx] number of lines
+# where each line contains [ny] number of integers 
+# integer values can be -1, 0 and ODD  numbers between 1~99 (i.e. 1,3,5,...,99)
+# -1 represents a grounded port
+# 0 represents a terminated port
+# odd numbers between 1~99 represent PCB port numbers to be included in analysis
+# all ports must be assigned as either ground, termination or numbered port (1~99)
+# the numbered ports must use consecutive odd numbers starting from 1
+
+# package terminals are not explicitly listed
+# package terminals are determined by PCB terminals according to following rule
+# (1) if a pin is grounded on PCB side, then it is also grounded on package side
+# (2) if a pin is terminated on PCB side, then it is also terminated on package side
+# (3) if a pin is attached to port 1 on PCB side, then it is attached to port 2 on package side
+#     similarly if a pin is attached to port n1 on PCB side, then it is attached to port n1+1 on package side
+# port numbers must form a consecutive list of integers 1,2,3,4,..., n 
+# where ports 1 and 2 are associated with a particular pin
+#       ports 3 and 4 are associated with another pin, etc. etc.
+
+[diffports] 6;
+1,3;
+2,4;
+5,7;
+6,8;
+9,11;
+10,12;
+
+# [diffports] keyword represents total number of diff ports, it is integer type
+# after this keyword, there must be equal number of lines of entries containing diff port assignments:
+# This is an example of four diff ports D1~D4: 
+# D1: p1, p3;
+# D2: p2, p4;
+# D3: p5, p7;
+# D4: p6, p8;
+...
+# list of diff ports
+# D1 and D2 are diff port pairs where D1 is on PCB side, D2 is on package side
+# similar to single-ended ports, the odd Diff ports are always on PCB side, and even Diff ports always on package side of the corresponding pins
+
+</Array>
+
+<Analysis>
+[start_freq] 0.05;
+#  start frequency of double type, default unit GHz;
+[stop_freq] 8;
+#  stop frequency of double type, default unit GHz;
+[step_freq] 0.05; 
+#  step frequency of double type, default unit GHz;
+[mesh_freq] 5; 
+#  mesh frequency of double type, default unit GHz;
+[sweep_type] interpolating;
+#  allowable values are {"interpolate", "discrete"}; case-insensitive
+[boundary] radiation;
+#  allowable values are {"radiation", "abc", "pec", "pmc"}; case-insensitive
+[accuracy] normal;
+#  allowable values are {"fast", "normal", "high"}; case-insensitive
+
+</Analysis>
+
+<Material>
+
+# list all materials used in this project
+# each line is a material, ending in ";"
+# syntax: 
+# category, type, name, permittivity, permeability, conductivity, loss tangent;
+
+user, dielectric, _peek_ceramic, 3.55, 1, 0, 0;
+system, conductor, gold, 1, 0.99996, 4.1E7, 0;
+system, conductor, copper, 1, 0.999991, 5.8E7, 0;
+system, dielectric, FR4_epoxy, 4.4, 1, 0, 0.02;
+ 
+</Material>
+
+<PinCavLib>
+# pin cavity library, for all those used in this project:
+# syntax for [pin1], [pin2], [pin3] is, 
+#    first entry contains pin name and cavity name, separated by "/"
+#    second entry is geometry type; at the moment, geometry type could be {"rotatsym", "rotatspiral", "stl", "stlassy", "primassy"}
+#    only rotatsym is processed in this project
+# rotatsym: rotationally symmetrical shape
+# rotatcoil: rotationally symmetrical shape with a spiral coil
+# stl: single stl body
+# stlassy: assembly consisting of multiple stl bodies
+# primassy: assembly consisting of primitives
+# IN THIS PROJECT, WE ONLY WORK WITH "rotatsym" 
+
+# this is the section for pin1: 
+[Pin1] 248-01/c248-01, rotatsym;
+  {248-01}  gold, 5, 5.04, 0.31,   (0.08 0.15 0.05), (0.15 0.15 0.22), 
+            (0.25 0.31 0.1),(0.31 0.31 3.8), (0.2 0.2 0.87);
+  # this record starts with the pin1 name {248-01}, followed by
+  #       material name, No. of sections, total length, nominal diameter, (d1b d1t h1), (d2b d2t h2), ...;
+  # all dimensions have default unit in mm;
+  # records can be put on separate lines if needed, if the first line does not end with an ";", 
+  #      the subsequent lines will be assembled into a single line until an ";" character is encountered.
+  
+  {c248-01} 4, 5.21, 0.35, (0.18 0.18 0.18), (0.35 0.35 4.39), (0.23 0.23 0.37), (0.35 0.35 0.27);
+  # syntax of cavity is the same as pin, except the material omitted (it is always defaults to air)
+  # this record starts with the cavity name {c248-01}, followed by
+  # No. of sections, total length, nominal diameter, (d1b d1t h1), (d2b d2t h2), ...;
+
+# if the project only uses one pin as defined in [Array], the records for [Pin2] and [Pin3] do not have to be present
+#    and even if they do present, they are ignored
+[Pin2]
+[Pin3]
+
+</PinCavLib>
+
