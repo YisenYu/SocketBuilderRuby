@@ -1,4 +1,4 @@
 load './SocketBuilder.rb'
-datafile = "./data.txt"
-# datafile = "./testdata.txt"
+datafile = "./testdata.sbf"
+# datafile = "./testdata.sbf"
 builder = SocketBuilder.new(0,0,0,datafile)

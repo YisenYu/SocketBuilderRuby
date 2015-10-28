@@ -305,7 +305,7 @@
 # list all materials used in this project
 # each line is a material, ending in ";"
 # syntax: 
-# category, type, name, permittivity, permeability, conductivity, loss tangent;
+# category, type, name, permittivity, permeability, conductivity, loss_tangent;
 
 user, dielectric, _peek_ceramic, 3.55, 1, 0, 0;
 system, conductor, gold, 1, 0.99996, 4.1E7, 0;
